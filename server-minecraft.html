@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="https://mikolajfiuk.xce.pl/favicon.ico">
+<title>Serwer Minecraft – Debian 12</title>
+
+<style>
+:root {
+    --accent: #00ff9c;
+    --accent-soft: rgba(0,255,156,0.25);
+    --bg-dark: rgba(15,15,15,0.65);
+}
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color: #eaeaea;
+    padding: 30px;
+    background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+        url("https://mikolajfiuk.xce.pl/zdo/tło24.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.container {
+    max-width: 980px;
+    margin: auto;
+    background: var(--bg-dark);
+    backdrop-filter: blur(16px);
+    border-radius: 20px;
+    padding: 35px 40px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+    animation: fadeIn 0.8s ease-out;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.4rem;
+    margin-bottom: 15px;
+}
+
+h2 {
+    margin-top: 45px;
+    border-left: 5px solid var(--accent);
+    padding-left: 14px;
+}
+
+h3 {
+    margin-top: 30px;
+    color: #ffffff;
+}
+
+h4 {
+    margin-top: 22px;
+    color: #ffd479;
+}
+
+p, li {
+    line-height: 1.75;
+    opacity: 0.95;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+pre {
+    background: #0b0b0b;
+    border-radius: 14px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin-top: 12px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    transition: 0.25s ease;
+}
+
+pre:hover {
+    transform: scale(1.015);
+    box-shadow: 0 0 25px var(--accent-soft);
+}
+
+code {
+    color: #ffffff;
+    font-family: Consolas, monospace;
+    font-size: 0.95rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-left: 8px;
+}
+
+.tip {
+    margin-top: 15px;
+    padding: 14px 18px;
+    border-left: 4px solid var(--accent);
+    background: rgba(0,0,0,0.35);
+    border-radius: 12px;
+}
+
+.footer {
+    margin-top: 55px;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.65;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Serwer Minecraft – Debian 12 <span class="badge">ADMIN MODE</span></h1>
+<h3>Instalowanie  Debiana</h3>
+<a href="https://youtu.be/7lYqAVyqN8U?si=gfdWWXCav1aP2eHe" target="_blank">
+  Obejrzyj wideo
+</a>
+
+<h3>Program putty</h3>
+<a href="https://mikolajfiuk.xce.pl/pobiesz/putty.exe" target="_blank">
+</a>
+
+<h3>Program WinSCP</h3>
+<a href="https://mikolajfiuk.xce.pl/pobiesz/WinSCP.zip" target="_blank">
+</a>
+
+<p>
+Maszyna testowa: <b>8 GB RAM, Core2DUO</b> – działa stabilnie przy dobrej optymalizacji.
+Do większej liczby graczy zalecana mocniejsza maszyna.
+</p>
+
+<h2>Kroki instalacji</h2>
+
+<h3>1. Aktualizacja systemu</h3>
+<pre><code>apt update && apt upgrade -y</code></pre>
+
+<h3>2. Instalacja Javy</h3>
+<pre><code>apt install default-jre -y
+java -version</code></pre>
+
+<div class="tip">Wybór wersji Javy nie jest wymagany w większości przypadków.</div>
+<pre><code>sudo update-alternatives --config java
+java -version</code></pre>
+
+<h3>3. Użytkownik serwera</h3>
+<pre><code>adduser minecraft
+usermod -aG sudo minecraft</code></pre>
+
+<h3>4. Screen (praca w tle)</h3>
+<pre><code>apt install screen -y</code></pre>
+
+<h3>5. Pobranie server.jar</h3>
+
+<h4>Snapshot 26.1</h4>
+<pre><code>wget https://piston-data.mojang.com/v1/objects/96d4f0176139e428a7ae1070ad419691a3f399ec/server.jar</code></pre>
+
+<h4>Java 1.21.11</h4>
+<pre><code>wget https://piston-data.mojang.com/v1/objects/64bb6d763bed0a9f1d632ec347938594144943ed/server.jar</code></pre>
+
+<h4>Serwer z pluginami (Bukkit)</h4>
+<pre><code>wget https://getbukkit.org/get/AfuyQcEkLcPU9p6jitBdBkGotQvy8ghM</code></pre>
+
+<h3>6. Skrypt startowy</h3>
+<pre><code>nano start.sh</code></pre>
+<pre><code>java -Xmx3G -Xms1G -jar server.jar nogui</code></pre>
+<pre><code>chmod +x start.sh</code></pre>
+
+<h3>7. Pierwsze uruchomienie</h3>
+<pre><code>./start.sh</code></pre>
+<pre><code>nano eula.txt
+eula=true</code></pre>
+
+<h3>8. Uruchomienie w tle</h3>
+<p>Używając <code>screen</code>, możesz uruchomić serwer Minecraft w tle i łatwo się do niego podłączyć.</p>
+<pre><code># Tworzenie nowej sesji o nazwie "minecraft"
+screen -S minecraft
+
+# Dołączenie do istniejącej sesji
+screen -r minecraft
+
+# Zakończenie sesji "minecraft"
+screen -S minecraft -X quit
+
+# Odłączenie się od sesji, pozostawiając ją działającą, a następnie ponowne dołączenie
+screen -d -r 1811.minecraft
+</code></pre>
+
+<h3>9. Stały adres IP dla komputera / serwera</h3>
+<p>Dlaczego warto ustawić stały IP?</p>
+<ul>
+  <li>Twój komputer zawsze będzie miał ten sam adres w sieci lokalnej.</li>
+  <li>Ułatwia to konfigurację serwerów, przekierowywanie portów i zdalny dostęp.</li>
+  <li>Zapobiega problemom, gdy router przydziela nowy IP automatycznie (DHCP).</li>
+</ul>
+
+<h4>Krok 1: Sprawdź aktualny adres IP</h4>
+<pre><code>1. Naciśnij Windows + R i wpisz: cmd
+2. W oknie wiersza poleceń wpisz: ipconfig
+3. Zwróć uwagę na:
+   - IPv4 Address (np. 192.168.1.50)
+   - Subnet Mask (np. 255.255.255.0)
+   - Default Gateway (np. 192.168.1.1)</code></pre>
+
+<h4>Krok 2: Otwórz ustawienia sieci</h4>
+<pre><code>1. Panel sterowania → Sieć i Internet → Centrum sieci i udostępniania
+2. Po lewej: Zmień ustawienia karty sieciowej
+3. Kliknij prawym na swoją kartę sieciową → Właściwości</code></pre>
+
+<h4>Krok 3: Ustawienia protokołu IPv4</h4>
+<pre><code>1. Wybierz: „Protokół internetowy w wersji 4 (TCP/IPv4)” → Właściwości
+2. Zaznacz: „Użyj następującego adresu IP”
+3. Wpisz dane z kroku 1:
+   - Adres IP: np. 192.168.1.50
+   - Maska podsieci: np. 255.255.255.0
+   - Brama domyślna: np. 192.168.1.1
+4. W sekcji DNS możesz wpisać np.:
+   - Preferowany DNS: 8.8.8.8
+   - Alternatywny DNS: 8.8.4.4</code></pre>
+
+<h4>Krok 4: Zapisz ustawienia</h4>
+<pre><code>1. Kliknij OK → OK
+2. Odłącz się i połącz ponownie z siecią (lub zrestartuj komputer)</code></pre>
+
+<h4>Krok 5: Konfiguracja routera (opcjonalnie)</h4>
+<pre><code>1. Zaloguj się do panelu routera (adres z bramy domyślnej)
+2. Znajdź sekcję DHCP → Zarezerwuj IP dla Twojego komputera
+3. Dzięki temu router zawsze przydzieli Ci ten sam IP</code></pre>
+
+<h3>10. Firewall</h3>
+<pre><code>apt install ufw -y
+ufw allow 25565
+ufw enable</code></pre>
+
+<h2>Światy i pluginy – tip od Mikołaja</h2>
+<ul>
+<li>Każdy świat = osobny użytkownik</li>
+<li>Pluginy wrzucaj do <code>/plugins</code></li>
+<li>Backupy rób <b>zawsze</b></li>
+</ul>
+
+<h3>Screen – skróty</h3>
+<pre><code>CTRL + A + D   # odłącz
+screen -r     # powrót
+screen -ls    # lista</code></pre>
+
+<h3>Wyłączenie serwera</h3>
+<pre><code>stop
+CTRL + A + D</code></pre>
+
+<div class="footer">
+© Mikołaj Fiuk • Debian • Minecraft • Full Admin Energy
+</div>
+
+</div>
+</body>
+</html>
